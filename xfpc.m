@@ -55,7 +55,7 @@ cp2 = 0.56; % W*min*Kg/KpK 2,000 J/Kg*K
 
 % load the ambient temperature data
 % M = xlsread('Phoenix Temperature Dec 4 2011 to Dec 4 2012.xlsx');
-M = xlsread('Phoenix Temperature 4 Weeks 4 Seasons.xlsx');
+M = readmatrix('phoenix_termperature_4_weeks_4_seasons.csv');
 t = (1:size(M,1)); % time in hours
 
 % Ka = M(:,end)' - 20; % temperature in C
@@ -68,7 +68,7 @@ th = mod(t,24);
 % end
 
 % load the load profile data
-M = xlsread('EV Transformer Load.xlsx');
+M = readmatrix('ev_transformer_load.csv');
 tl = M(2:end,1);
 L = M(2:end,2); % EV
 L = L/max(L);
