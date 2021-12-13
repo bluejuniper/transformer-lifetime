@@ -1,32 +1,20 @@
 %% housekeeping
-clear; clc; clf; hold on
+clear; clc
 
 options.vary_offset = true;
 
+heating_file = 'C:/Users/305232/OUO/gmd-cascade/data/xf_heating/heating_data.mat';
+load(heating_file)
 
-
-% load the ambient temperature data
-% M = xlsread('Phoenix Temperature Dec 4 2011 to Dec 4 2012.xlsx');
-M = readmatrix('phoenix_termperature_4_weeks_4_seasons.csv');
-t = (1:size(M,1)); % time in hours
-
-% Ka = M(:,end)' - 20; % temperature in C
-Ka = M(:,end-1)';
-
-th = mod(t,24);
-
-% load the load profile data
-M = readmatrix('ev_transformer_load.csv');
-tl = M(2:end,1);
-L = M(2:end,2); % EV
-L = L/max(L);
-L = interp1(tl,L,0:23,'pchip','extrap');
-L = repmat(L,1,32);
+Ka = 25;
+t0 = t(1:10)/60; % use time in minutes
+[t,ia] = unique(t0);
 
 
 tau_e = 71/60; % winding time constant in hours
 delta_er = 75;
-
+L0 = s_fr_norm(1:10,1);
+L = L0(ia);
 
 %% ode parameters
 Dt = mean(diff(t));

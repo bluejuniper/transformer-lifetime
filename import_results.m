@@ -60,8 +60,8 @@ end
 % fprintf('Done saving\n')
 
 %% Read results data
-% for i = 1:nt
-for i = 1:5
+for i = 1:nt
+% for i = 1:5
     fname = sprintf('%s\\movie_%d.json', results_dir, i);
     fprintf('Reading %d/%d\n',i,nt);
     fid = fopen(fname); 

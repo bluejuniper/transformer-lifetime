@@ -58,8 +58,8 @@ fprintf('Done saving\n')
 %% Read results data
 % data = [];
 
-for i = 1:10
-% for i = 1:nt
+% for i = 1:10 
+for i = 1:nt
     fprintf('Reading %d/%d\n',i,nt);
     fname = sprintf('%s\\movie_%d.mat', results_dir, i);
     load(fname);
