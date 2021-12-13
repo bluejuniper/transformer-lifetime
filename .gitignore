@@ -1,3 +1,4 @@
 .dupver
 *.xlsx
 .dupver_ignore
+*.asv

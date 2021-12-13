@@ -1,19 +1,15 @@
 base_dir = 'C:\Users\305232\Results\gmd_cascade_results';
 scenario = 'wecc_apr_2019_20hs3ap_pwver21_draft7_nw_wa_gic_blake_20031120_3d';
 results_dir = sprintf('%s\\%s', base_dir, scenario);
-results_glob = sprintf('%s\\%s\\*.json', base_dir, scenario);
+results_glob = sprintf('%s\\%s\\*.mat', base_dir, scenario);
 results_files = dir(results_glob);
 
 nt = length(results_files);
 
 % read in the inital file
-fname = sprintf('%s\\movie_1.json', results_dir);
+fname = sprintf('%s\\movie_1.mat', results_dir);
 fprintf('Reading inital frame\n');
-fid = fopen(fname); 
-raw = fread(fid,inf); 
-str = char(raw'); 
-fclose(fid); 
-val = jsondecode(str);
+load(fname);
 branch_struct = val.net.branch;
 branch_keys = fields(branch_struct);
 nb = length(branch_keys)
@@ -40,6 +36,7 @@ for i = 1:nb
     end
 end
 
+% xf_ids = sparse(xf_ids);
 xf_ids = xf_ids(xf_ids ~= 0);
 nx = length(xfs);
 
@@ -58,20 +55,13 @@ save('-nocompression',xf_file,'xfs','rate_a')
 fprintf('Done saving\n')
 
 %% Read results data
-for i = 1:nt
-    fname = sprintf('%s\\movie_%d.json', results_dir, i);
-    fprintf('Reading %d/%d\n',i,nt);
-    fid = fopen(fname); 
-    raw = fread(fid,inf); 
-    str = char(raw'); 
-    fclose(fid); 
-    val = jsondecode(str);
-    t(i) = val.t;
-    
-    oname = replace(fname,'.json','.mat');
-    fprintf('Saving to %s\n\n',oname);
-    save('-nocompression',oname,'val');
+% data = [];
 
+for i = 1:nt
+    fprintf('Reading %d/%d\n',i,nt);
+    fname = sprintf('%s\\movie_%d.mat', results_dir, i);
+    load(fname);
+    t(i) = val.t;
     branches = val.result.solution.branch;
 
     for j = 1:length(xf_ids)
