@@ -51,11 +51,10 @@ for i = 1:nx
     rate_a(i) = xfs(i).rate_a;
 end
 
-xf_file = 'C:/Users/305232/OUO/gmd-cascade/data/xf_heating/xf_data.mat';
-
-fprintf('Start saving...\n')
-save('-nocompression',xf_file,'xfs','rate_a')
-fprintf('Done saving\n')
+% xf_file = 'C:/Users/305232/OUO/gmd-cascade/data/xf_heating/xf_data.mat';
+% fprintf('Start saving...\n')
+% save('-nocompression',xf_file,'xfs','rate_a')
+% fprintf('Done saving\n')
 
 %% Read results data
 for i = 1:nt
@@ -91,9 +90,7 @@ for i = 1:nx
     s_fr_norm(:,i) = s_fr(:,i)/rate_a(i);
 end
 
-heating_file = 'C:/Users/305232/OUO/gmd-cascade/data/xf_heating/heating_data.mat';
-data_file = 'C:/Users/305232/OUO/gmd-cascade/data/xf_heating/data.mat';
-
-fprintf('Start saving...\n')
-save('-nocompression',heating_file,'xfs','rate_a','s_fr','s_fr_norm','t')
-fprintf('Done saving\n')
+% heating_file = 'C:/Users/305232/OUO/gmd-cascade/data/xf_heating/heating_data.mat';
+% fprintf('Start saving...\n')
+% save('-nocompression',heating_file,'xfs','rate_a','s_fr','s_fr_norm','t')
+% fprintf('Done saving\n')
