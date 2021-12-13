@@ -26,7 +26,7 @@ for i = 1:nb
     br = branch_struct.(br_name);
 
     if isfield(br,'type') && strcmp(br.type,'xf')
-        fprintf('Adding branch %s %d\\%d\n',br_name,i,nb)
+        fprintf('Adding branch %s %d\\%d\n',br_name,i,nb);
     
         xf = struct();
         xf.index = br.index;
@@ -40,12 +40,15 @@ for i = 1:nb
     end
 end
 
+fprintf('\n');
+
 xf_ids = xf_ids(xf_ids ~= 0);
 nx = length(xfs);
 
 t = zeros([1 nt]);
 rate_a = zeros([1 nx]);
 s_fr = zeros([nt nx]);
+ieff = zeros([nt nx]);
 
 for i = 1:nx
     rate_a(i) = xfs(i).rate_a;
@@ -57,7 +60,8 @@ end
 % fprintf('Done saving\n')
 
 %% Read results data
-for i = 1:nt
+% for i = 1:nt
+for i = 1:5
     fname = sprintf('%s\\movie_%d.json', results_dir, i);
     fprintf('Reading %d/%d\n',i,nt);
     fid = fopen(fname); 
@@ -71,13 +75,22 @@ for i = 1:nt
     fprintf('Saving to %s\n\n',oname);
     save('-nocompression',oname,'val');
 
-    branches = val.result.solution.branch;
+    branches = val.net.branch;
+    sbranches = val.result.solution.branch;
 
     for j = 1:length(xf_ids)
         xf_key = sprintf('x%d',xf_ids(j));
 
         if isfield(branches,xf_key)
             xf = branches.(xf_key);
+
+            if isfield(xf,'ieff')
+                ieff(i,j) = xf.ieff;
+            end
+        end
+
+        if isfield(sbranches,xf_key)
+            xf = sbranches.(xf_key);
             s_fr(i,j) = sqrt(xf.pf^2 + xf.qf^2);
         end
     end

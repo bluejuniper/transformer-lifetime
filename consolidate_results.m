@@ -43,6 +43,7 @@ nx = length(xfs);
 t = zeros([1 nt]);
 rate_a = zeros([1 nx]);
 s_fr = zeros([nt nx]);
+ieff = zeros([nt nx]);
 
 for i = 1:nx
     rate_a(i) = xfs(i).rate_a;
@@ -57,18 +58,29 @@ fprintf('Done saving\n')
 %% Read results data
 % data = [];
 
-for i = 1:nt
+for i = 1:10
+% for i = 1:nt
     fprintf('Reading %d/%d\n',i,nt);
     fname = sprintf('%s\\movie_%d.mat', results_dir, i);
     load(fname);
     t(i) = val.t;
-    branches = val.result.solution.branch;
+
+    branches = val.net.branch;
+    sbranches = val.result.solution.branch;
 
     for j = 1:length(xf_ids)
         xf_key = sprintf('x%d',xf_ids(j));
 
         if isfield(branches,xf_key)
             xf = branches.(xf_key);
+
+            if isfield(xf,'ieff')
+                ieff(i,j) = xf.ieff;
+            end
+        end
+
+        if isfield(sbranches,xf_key)
+            xf = sbranches.(xf_key);
             s_fr(i,j) = sqrt(xf.pf^2 + xf.qf^2);
         end
     end
@@ -82,8 +94,6 @@ for i = 1:nx
 end
 
 heating_file = 'C:/Users/305232/OUO/gmd-cascade/data/xf_heating/heating_data.mat';
-data_file = 'C:/Users/305232/OUO/gmd-cascade/data/xf_heating/data.mat';
-
 fprintf('Start saving...\n')
 save('-nocompression',heating_file,'xfs','rate_a','s_fr','s_fr_norm','t')
 fprintf('Done saving\n')
